@@ -302,11 +302,11 @@ Create shared constants for timeframe order and the required disclaimer.
 
 ### Acceptance Criteria
 
-* [ ] Timeframe order is defined once
-* [ ] Disclaimer text is defined once
-* [ ] No duplicate disclaimer strings remain
-* [ ] Utility for grouping tasks by timeframe exists
-* [ ] Grouping utility preserves required order
+* [x] Timeframe order is defined once
+* [x] Disclaimer text is defined once
+* [x] No duplicate disclaimer strings remain
+* [x] Utility for grouping tasks by timeframe exists
+* [x] Grouping utility preserves required order
 
 ### Suggested Branch
 
@@ -351,13 +351,13 @@ The prompt must instruct the model to:
 
 ### Acceptance Criteria
 
-* [ ] Initial-plan prompt is supported
-* [ ] Updated-plan prompt is supported
-* [ ] Previous plan is included only when supplied
-* [ ] Scenario change is included only when supplied
-* [ ] Safety rules appear in the prompt
-* [ ] Output schema expectations are clear
-* [ ] Prompt does not request chain-of-thought reasoning
+* [x] Initial-plan prompt is supported
+* [x] Updated-plan prompt is supported
+* [x] Previous plan is included only when supplied
+* [x] Scenario change is included only when supplied
+* [x] Safety rules appear in the prompt
+* [x] Output schema expectations are clear
+* [x] Prompt does not request chain-of-thought reasoning
 
 ### Suggested Branch
 
