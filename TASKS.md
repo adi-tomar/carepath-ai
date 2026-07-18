@@ -55,20 +55,20 @@ The repository should already use:
 
 ### Acceptance Criteria
 
-* [ ] Existing Next.js project structure is valid
-* [ ] TypeScript is enabled
-* [ ] TypeScript strict mode is enabled
-* [ ] App Router is being used
-* [ ] Tailwind CSS is configured and functioning
-* [ ] ESLint is configured
-* [ ] npm is the active package manager
-* [ ] `npm install` succeeds
-* [ ] `npm run lint` succeeds
-* [ ] `npm run build` succeeds
-* [ ] `npm run dev` starts successfully
-* [ ] Existing project documentation is preserved
-* [ ] No unnecessary project reinitialization was performed
-* [ ] Any discovered configuration issues were fixed with minimal changes
+* [x] Existing Next.js project structure is valid
+* [x] TypeScript is enabled
+* [x] TypeScript strict mode is enabled
+* [x] App Router is being used
+* [x] Tailwind CSS is configured and functioning
+* [x] ESLint is configured
+* [x] npm is the active package manager
+* [x] `npm install` succeeds
+* [x] `npm run lint` succeeds
+* [x] `npm run build` succeeds
+* [x] `npm run dev` starts successfully
+* [x] Existing project documentation is preserved
+* [x] No unnecessary project reinitialization was performed
+* [x] Any discovered configuration issues were fixed with minimal changes
 
 ### Files to Review
 
@@ -131,11 +131,11 @@ lucide-react
 
 ### Acceptance Criteria
 
-* [ ] `zod` is installed
-* [ ] `lucide-react` is installed
-* [ ] Dependencies are recorded in `package.json`
-* [ ] Application still builds
-* [ ] Application still passes lint
+* [x] `zod` is installed
+* [x] `lucide-react` is installed
+* [x] Dependencies are recorded in `package.json`
+* [x] Application still builds
+* [x] Application still passes lint
 
 ### Suggested Branch
 
@@ -160,12 +160,12 @@ OLLAMA_MODEL=gemma4:12b
 
 ### Acceptance Criteria
 
-* [ ] `.env.example` exists
-* [ ] `.env.local` is ignored by Git
-* [ ] Ollama URL is read from the environment
-* [ ] Model name is read from the environment
-* [ ] Sensible development defaults exist
-* [ ] No secrets are committed
+* [x] `.env.example` exists
+* [x] `.env.local` is ignored by Git
+* [x] Ollama URL is read from the environment
+* [x] Model name is read from the environment
+* [x] Sensible development defaults exist
+* [x] No secrets are committed
 
 ### Suggested Branch
 
@@ -190,12 +190,12 @@ Create a simple page shell for CarePath AI.
 
 ### Acceptance Criteria
 
-* [ ] Application title is visible
-* [ ] Product purpose is understandable
-* [ ] Layout works on mobile
-* [ ] Layout works on desktop
-* [ ] No default Next.js content remains
-* [ ] No medical claims are displayed
+* [x] Application title is visible
+* [x] Product purpose is understandable
+* [x] Layout works on mobile
+* [x] Layout works on desktop
+* [x] No default Next.js content remains
+* [x] No medical claims are displayed
 
 ### Suggested Branch
 
@@ -245,15 +245,15 @@ Create `lib/schema.ts`.
 
 ### Acceptance Criteria
 
-* [ ] Schemas use Zod
-* [ ] TypeScript types are inferred from schemas
-* [ ] Enum values match `DESCRIPTION.md`
-* [ ] Initial and updated plans are supported
-* [ ] Invalid task priority is rejected
-* [ ] Invalid timeframe is rejected
-* [ ] Invalid owner is rejected
-* [ ] Required disclaimer is represented
-* [ ] No duplicate response type exists
+* [x] Schemas use Zod
+* [x] TypeScript types are inferred from schemas
+* [x] Enum values match `DESCRIPTION.md`
+* [x] Initial and updated plans are supported
+* [x] Invalid task priority is rejected
+* [x] Invalid timeframe is rejected
+* [x] Invalid owner is rejected
+* [x] Required disclaimer is represented
+* [x] No duplicate response type exists
 
 ### Suggested Branch
 
@@ -279,12 +279,12 @@ Create `lib/demo-data.ts`.
 
 ### Acceptance Criteria
 
-* [ ] All data is fictional
-* [ ] Initial fallback plan passes the Zod schema
-* [ ] Updated fallback plan passes the Zod schema
-* [ ] Initial and updated plans contain meaningful differences
-* [ ] No diagnosis or treatment recommendation appears
-* [ ] Fallback plan contains the required disclaimer
+* [x] All data is fictional
+* [x] Initial fallback plan passes the Zod schema
+* [x] Updated fallback plan passes the Zod schema
+* [x] Initial and updated plans contain meaningful differences
+* [x] No diagnosis or treatment recommendation appears
+* [x] Fallback plan contains the required disclaimer
 
 ### Suggested Branch
 
