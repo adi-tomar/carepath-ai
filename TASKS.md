@@ -386,15 +386,15 @@ Create `lib/ollama.ts`.
 
 ### Acceptance Criteria
 
-* [ ] Ollama URL comes from environment configuration
-* [ ] Model name comes from environment configuration
-* [ ] Request uses `stream: false`
-* [ ] Request uses a JSON schema in `format`
-* [ ] Temperature is between 0.1 and 0.4
-* [ ] Timeout is implemented
-* [ ] Patient content is not logged
-* [ ] Connection errors are converted into controlled errors
-* [ ] Model-not-found errors are distinguishable where possible
+* [x] Ollama URL comes from environment configuration
+* [x] Model name comes from environment configuration
+* [x] Request uses `stream: false`
+* [x] Request uses a JSON schema in `format`
+* [x] Temperature is between 0.1 and 0.4
+* [x] Timeout is implemented
+* [x] Patient content is not logged
+* [x] Connection errors are converted into controlled errors
+* [x] Model-not-found errors are distinguishable where possible
 
 ### Suggested Branch
 
@@ -423,17 +423,17 @@ app/api/plan/route.ts
 
 ### Acceptance Criteria
 
-* [ ] Request body is validated
-* [ ] Empty patient scenario is rejected
-* [ ] Prompt builder is used
-* [ ] Ollama client is used
-* [ ] Model content is parsed as JSON
-* [ ] Parsed content is validated with Zod
-* [ ] Only validated output is returned
-* [ ] Invalid JSON returns a controlled error
-* [ ] Invalid schema returns a controlled error
-* [ ] Stack traces are not exposed
-* [ ] Patient content is not logged
+* [x] Request body is validated
+* [x] Empty patient scenario is rejected
+* [x] Prompt builder is used
+* [x] Ollama client is used
+* [x] Model content is parsed as JSON
+* [x] Parsed content is validated with Zod
+* [x] Only validated output is returned
+* [x] Invalid JSON returns a controlled error
+* [x] Invalid schema returns a controlled error
+* [x] Stack traces are not exposed
+* [x] Patient content is not logged
 
 ### Suggested Branch
 
@@ -465,12 +465,12 @@ app/api/health/route.ts
 
 ### Acceptance Criteria
 
-* [ ] Endpoint does not send patient data
-* [ ] Ollama availability is checked
-* [ ] Configured model is identified
-* [ ] Response is simple and safe
-* [ ] Endpoint handles Ollama being unavailable
-* [ ] No stack traces are exposed
+* [x] Endpoint does not send patient data
+* [x] Ollama availability is checked
+* [x] Configured model is identified
+* [x] Response is simple and safe
+* [x] Endpoint handles Ollama being unavailable
+* [x] No stack traces are exposed
 
 ### Suggested Branch
 
