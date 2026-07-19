@@ -1,8 +1,10 @@
+import { CheckCircle2, Circle } from "lucide-react";
 import { groupTasksByTimeframe } from "../lib/constants";
 import type { Task } from "../lib/schema";
 
 interface TaskTimelineProps {
   tasks: Task[];
+  onToggleComplete: (taskId: string) => void;
 }
 
 const timeframeLabels: Record<string, string> = {
@@ -30,7 +32,7 @@ function priorityClass(priority: string) {
   }
 }
 
-export function TaskTimeline({ tasks }: TaskTimelineProps) {
+export function TaskTimeline({ tasks, onToggleComplete }: TaskTimelineProps) {
   const groupedTasks = groupTasksByTimeframe(tasks);
   const populatedGroups = Object.entries(groupedTasks).filter(([, items]) => items.length > 0);
 
@@ -53,11 +55,45 @@ export function TaskTimeline({ tasks }: TaskTimelineProps) {
 
             <div className="mt-4 space-y-3">
               {items.map((task) => (
-                <div key={task.id} className="rounded-2xl border border-white bg-white/90 p-4 shadow-sm">
+                <div
+                  key={task.id}
+                  className={`rounded-2xl border bg-white/90 p-4 shadow-sm transition ${
+                    task.status === "completed"
+                      ? "border-emerald-200 bg-emerald-50/70"
+                      : "border-white"
+                  }`}
+                >
                   <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <p className="text-base font-semibold text-slate-900">{task.title}</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">{task.description}</p>
+                    <div className="flex min-w-0 flex-1 items-start gap-3">
+                      <button
+                        type="button"
+                        onClick={() => onToggleComplete(task.id)}
+                        aria-label={
+                          task.status === "completed"
+                            ? `Mark ${task.title} as not started`
+                            : `Mark ${task.title} as completed`
+                        }
+                        aria-pressed={task.status === "completed"}
+                        className="mt-0.5 shrink-0 rounded-full text-emerald-600 transition hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+                      >
+                        {task.status === "completed" ? (
+                          <CheckCircle2 aria-hidden="true" className="h-6 w-6" />
+                        ) : (
+                          <Circle aria-hidden="true" className="h-6 w-6 text-slate-300" />
+                        )}
+                      </button>
+                      <div>
+                        <p
+                          className={`text-base font-semibold ${
+                            task.status === "completed"
+                              ? "text-slate-500 line-through"
+                              : "text-slate-900"
+                          }`}
+                        >
+                          {task.title}
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-slate-600">{task.description}</p>
+                      </div>
                     </div>
                     <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${priorityClass(task.priority)}`}>
                       {task.priority}
@@ -73,6 +109,15 @@ export function TaskTimeline({ tasks }: TaskTimelineProps) {
                     </span>
                     <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
                       {task.source}
+                    </span>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                        task.status === "completed"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-slate-100 text-slate-600"
+                      }`}
+                    >
+                      {task.status}
                     </span>
                     {task.changeStatus !== "unchanged" ? (
                       <span className="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">

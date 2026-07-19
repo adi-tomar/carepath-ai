@@ -54,6 +54,24 @@ export default function Home() {
     }
   }
 
+  function handleToggleComplete(taskId: string) {
+    setPlan((currentPlan) => {
+      if (!currentPlan) return currentPlan;
+
+      return {
+        ...currentPlan,
+        tasks: currentPlan.tasks.map((task) =>
+          task.id === taskId
+            ? {
+                ...task,
+                status: task.status === "completed" ? "not started" : "completed",
+              }
+            : task,
+        ),
+      };
+    });
+  }
+
   return (
     <main className="min-h-screen bg-[#f8fdf9] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -113,7 +131,10 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="mt-5">
-                    <TaskTimeline tasks={plan.tasks} />
+                    <TaskTimeline
+                      tasks={plan.tasks}
+                      onToggleComplete={handleToggleComplete}
+                    />
                   </div>
                 </section>
 
