@@ -1,7 +1,33 @@
 import { requiredDisclaimer } from "./constants";
 import type { Plan, PlanRequest } from "./schema";
 
-const basePrompt = `You are a care-coordination assistant. Organize the supplied patient scenario and care instructions into a concise care plan. Do not diagnose, recommend treatment, recommend medication changes, or invent clinical instructions. Label every task source as one of: provided scenario, provided care instructions, or coordination suggestion. Generate 8 to 12 concise tasks. Use the allowed task values and return structured JSON that matches the expected schema. Include this disclaimer in the output: ${requiredDisclaimer}`;
+const exampleTask = `{
+  "id": "task-1",
+  "title": "Confirm transportation for physical therapy",
+  "description": "Identify and confirm transportation for Monday's appointment.",
+  "timeframe": "within-48-hours",
+  "priority": "high",
+  "owner": "care coordinator",
+  "source": "provided scenario",
+  "status": "not started",
+  "reason": "Mary cannot drive, so transportation must be confirmed before her scheduled physical therapy appointment.",
+  "changeStatus": "unchanged"
+}`;
+
+const basePrompt = `You are a care-coordination assistant. Organize only the supplied patient scenario and care instructions into a concise care plan.
+
+Do not provide a clinical assessment, diagnose, classify medical risk, recommend treatment, recommend medication changes, name possible complications, create symptom or red-flag lists, or invent clinical instructions. Turn clinical uncertainties into questions for the qualified care team. Keep coordination risks logistical, such as missing transportation, unavailable support, or incomplete information.
+
+Generate 8 to 12 concise, non-duplicative tasks. Every task must include a non-empty "reason" field. The reason must be one complete sentence explaining why the task is needed based on the supplied patient scenario or care instructions. Never return an empty or whitespace-only string for "reason". Do not remove a task or substitute an empty reason.
+
+Use only these exact timeframe values: "today", "within-48-hours", "this-week", "upcoming".
+Use only these task sources: "provided scenario", "provided care instructions", "coordination suggestion".
+Return planChangeSummary as one non-empty string, never an array.
+
+Valid complete task example:
+${exampleTask}
+
+Return structured JSON matching the supplied schema. Include this disclaimer exactly: ${requiredDisclaimer}`;
 
 export function createInitialPlanPrompt(request: PlanRequest): string {
   return [
@@ -12,6 +38,9 @@ export function createInitialPlanPrompt(request: PlanRequest): string {
     "",
     "Care instructions:",
     request.careInstructions,
+    "",
+    'For this initial plan, set every task\'s "changeStatus" to "unchanged".',
+    'Set "planChangeSummary" to "This is the initial care-coordination plan."',
     "",
     "Return JSON with patientSummary, tasks, questionsForCareTeam, missingInformation, coordinationRisks, planChangeSummary, and disclaimer.",
   ].join("\n");

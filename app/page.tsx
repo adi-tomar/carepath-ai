@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { ChangePanel } from "../components/ChangePanel";
 import { Disclaimer } from "../components/Disclaimer";
 import { ErrorMessage } from "../components/ErrorMessage";
@@ -10,44 +10,44 @@ import { PlanChanges } from "../components/PlanChanges";
 import { ScenarioForm } from "../components/ScenarioForm";
 import { SupportSections } from "../components/SupportSections";
 import { TaskTimeline } from "../components/TaskTimeline";
-import { initialFallbackPlan } from "../lib/demo-data";
 import type { Plan } from "../lib/schema";
 
 export default function Home() {
-  const [plan, setPlan] = useState<Plan | null>(initialFallbackPlan);
+  const [plan, setPlan] = useState<Plan | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scenarioChange, setScenarioChange] = useState("");
 
-  const summary = useMemo(() => plan?.patientSummary ?? null, [plan]);
-
-  async function handleGenerate(payload: { patientScenario: string; careInstructions: string }) {
+  async function handleGenerate(payload: {
+    patientScenario: string;
+    careInstructions: string;
+  }) {
+    if (isLoading) return;
     setIsLoading(true);
     setError(null);
 
     try {
       const response = await fetch("/api/plan", {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          patientScenario: payload.patientScenario,
-          careInstructions: payload.careInstructions,
+          ...payload,
           scenarioChange: scenarioChange.trim() || undefined,
           previousPlan: plan ?? undefined,
         }),
       });
+      const result = (await response.json()) as Plan & { error?: string };
 
       if (!response.ok) {
-        throw new Error("Unable to generate a plan from the current inputs.");
+        throw new Error(result.error ?? "Unable to generate the care plan.");
       }
 
-      const nextPlan = (await response.json()) as Plan;
-      setPlan(nextPlan);
+      setPlan(result);
     } catch (submitError) {
       setError(
-        submitError instanceof Error ? submitError.message : "Unable to generate a plan.",
+        submitError instanceof Error
+          ? submitError.message
+          : "Unable to generate the care plan.",
       );
     } finally {
       setIsLoading(false);
@@ -55,55 +55,61 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(226,232,240,0.35),_transparent_35%)] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <header className="rounded-[28px] border border-slate-200 bg-white/95 p-6 shadow-sm backdrop-blur sm:p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">CarePath AI</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
-            A calmer way to turn care details into a clear next-step plan.
+    <main className="min-h-screen bg-[#f8fdf9] px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6">
+        <header className="rounded-[30px] border border-emerald-100 bg-white p-6 shadow-[0_12px_40px_rgba(16,185,129,0.07)] sm:p-8">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+              Local Gemma
+            </span>
+            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
+              Coordination only
+            </span>
+          </div>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+            A clearer path through care coordination.
           </h1>
           <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
-            Organize care instructions, spot important follow-ups, and keep the next steps easy to understand.
+            Turn supplied patient circumstances and care instructions into focused cards,
+            priorities, owners, and an easy-to-scan timeline.
           </p>
         </header>
 
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="space-y-6">
-            <ScenarioForm onSubmit={handleGenerate} />
+        <div className="grid items-start gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-6 lg:sticky lg:top-6">
+            <ScenarioForm isLoading={isLoading} onSubmit={handleGenerate} />
             <ChangePanel value={scenarioChange} onChange={setScenarioChange} />
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6" aria-live="polite">
             {error ? <ErrorMessage message={error} /> : null}
             {isLoading ? <LoadingState /> : null}
 
-            {summary ? (
-              <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Overview</p>
-                    <h2 className="mt-1 text-2xl font-semibold text-slate-900">Your care plan snapshot</h2>
-                  </div>
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700">
-                    Friendly and simple
-                  </span>
+            {!plan && !isLoading && !error ? (
+              <section className="rounded-[28px] border border-dashed border-emerald-200 bg-white/70 p-8 text-center">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-xl text-emerald-700">
+                  ✓
                 </div>
-                <div className="mt-5">
-                  <PatientSummary summary={summary} />
-                </div>
+                <h2 className="mt-4 text-xl font-semibold text-slate-900">Your plan will appear here</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Tasks will be grouped by timing and displayed with priority, owner,
+                  status, and source pills.
+                </p>
               </section>
             ) : null}
 
-            {plan ? (
+            {plan && !isLoading ? (
               <>
-                <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                  <div className="flex items-start justify-between gap-3">
+                <PatientSummary summary={plan.patientSummary} />
+
+                <section className="rounded-[28px] border border-emerald-100 bg-white p-5 shadow-[0_12px_35px_rgba(16,185,129,0.07)] sm:p-6">
+                  <div className="flex flex-wrap items-end justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Tasks</p>
-                      <h2 className="mt-1 text-2xl font-semibold text-slate-900">Your next steps</h2>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">Timeline</p>
+                      <h2 className="mt-1 text-2xl font-semibold text-slate-900">Prioritized next steps</h2>
                     </div>
                     <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                      Clear priorities
+                      {plan.tasks.length} tasks
                     </span>
                   </div>
                   <div className="mt-5">
@@ -111,26 +117,12 @@ export default function Home() {
                   </div>
                 </section>
 
-                <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Updates</p>
-                  <h2 className="mt-1 text-2xl font-semibold text-slate-900">What changed</h2>
-                  <div className="mt-4">
-                    <PlanChanges summary={plan.planChangeSummary} />
-                  </div>
-                </section>
-
-                <section className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Support</p>
-                  <h2 className="mt-1 text-2xl font-semibold text-slate-900">Helpful follow-up details</h2>
-                  <div className="mt-4">
-                    <SupportSections
-                      questions={plan.questionsForCareTeam}
-                      missingInformation={plan.missingInformation}
-                      risks={plan.coordinationRisks}
-                    />
-                  </div>
-                </section>
-
+                <PlanChanges summary={plan.planChangeSummary} />
+                <SupportSections
+                  questions={plan.questionsForCareTeam}
+                  missingInformation={plan.missingInformation}
+                  risks={plan.coordinationRisks}
+                />
                 <Disclaimer />
               </>
             ) : null}

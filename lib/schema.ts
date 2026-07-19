@@ -23,15 +23,15 @@ export const changeStatusEnum = z.enum([
 ]);
 
 export const taskSchema = z.object({
-  id: z.string(),
-  title: z.string().min(1),
-  description: z.string().min(1),
+  id: z.string().trim().min(1),
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
   timeframe: timeframeEnum,
   priority: priorityEnum,
   owner: ownerEnum,
   source: sourceEnum,
   status: statusEnum,
-  reason: z.string().min(1),
+  reason: z.string().trim().min(1, "Every task must include a reason."),
   changeStatus: changeStatusEnum,
 });
 
